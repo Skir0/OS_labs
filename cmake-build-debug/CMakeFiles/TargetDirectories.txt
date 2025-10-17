@@ -1,0 +1,3 @@
+/Users/kirill_smychok/CLionProjects/osi_smychok/cmake-build-debug/CMakeFiles/osi_smychok.dir
+/Users/kirill_smychok/CLionProjects/osi_smychok/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kirill_smychok/CLionProjects/osi_smychok/cmake-build-debug/CMakeFiles/rebuild_cache.dir
