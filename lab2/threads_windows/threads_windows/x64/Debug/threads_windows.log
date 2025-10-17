@@ -1,0 +1,5 @@
+﻿  threads_windows.cpp
+C:\Users\Kiryl\vs projects\threads_windows\threads_windows\threads_windows.cpp(148,37): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Kiryl\vs projects\threads_windows\threads_windows\threads_windows.cpp(154,25): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Kiryl\vs projects\threads_windows\threads_windows\threads_windows.cpp(196,50): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+  threads_windows.vcxproj -> C:\Users\Kiryl\vs projects\threads_windows\x64\Debug\threads_windows.exe
