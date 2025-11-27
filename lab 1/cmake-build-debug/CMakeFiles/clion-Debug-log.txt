@@ -1,1 +1,0 @@
-CMakeLists.txt not found in /Users/kirill_smychok/CLionProjects/osi_smychok/lab 1 Select CMakeLists.txt
