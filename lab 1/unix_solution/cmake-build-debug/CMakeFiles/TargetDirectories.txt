@@ -1,0 +1,14 @@
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/MyStaticLibrary/CMakeFiles/MyStaticLibrary.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/MyStaticLibrary/CMakeFiles/edit_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/MyStaticLibrary/CMakeFiles/rebuild_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/StaticLibraryUser/CMakeFiles/StaticLibraryUser.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/StaticLibraryUser/CMakeFiles/edit_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/StaticLibraryUser/CMakeFiles/rebuild_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/MyDynamicLibrary/CMakeFiles/MyDynamicLibrary.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/MyDynamicLibrary/CMakeFiles/edit_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/MyDynamicLibrary/CMakeFiles/rebuild_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/DynamicLibraryUser/CMakeFiles/DynamicLibraryUser.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/DynamicLibraryUser/CMakeFiles/edit_cache.dir
+/Users/kirill_smychok/CLionProjects/lab_1_macOS_libraries/cmake-build-debug/DynamicLibraryUser/CMakeFiles/rebuild_cache.dir

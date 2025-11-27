@@ -1,0 +1,4 @@
+add_executable(DynamicLibraryUser main.cpp)
+
+
+target_link_libraries(DynamicLibraryUser PRIVATE MyDynamicLibrary)
