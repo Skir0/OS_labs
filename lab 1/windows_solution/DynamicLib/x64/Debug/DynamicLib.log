@@ -1,0 +1,69 @@
+﻿  VectorLibrary.cpp
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(20,12): warning C4251: 'Vector::x': 'Number' needs to have dll-interface to be used by clients of 'Vector'
+  (compiling source file 'VectorLibrary.cpp')
+      C:\Users\Kiryl\vs projects\WindowsLibs\StaticLib\NumberLibrary.h(4,7):
+      see declaration of 'Number'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(21,12): warning C4251: 'Vector::y': 'Number' needs to have dll-interface to be used by clients of 'Vector'
+  (compiling source file 'VectorLibrary.cpp')
+      C:\Users\Kiryl\vs projects\WindowsLibs\StaticLib\NumberLibrary.h(4,7):
+      see declaration of 'Number'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(7,14): warning C4273: 'ZeroVector': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(43,32):
+      see previous definition of 'ZeroVector'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(8,14): warning C4273: 'UnitVector': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(44,32):
+      see previous definition of 'UnitVector'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(10,16): warning C4273: 'Vector::getX': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(27,12):
+      see previous definition of 'Vector::getX'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(15,16): warning C4273: 'Vector::getY': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(28,12):
+      see previous definition of 'Vector::getY'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(20,14): warning C4273: 'Vector::setX': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(29,10):
+      see previous definition of 'Vector::setX'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(24,14): warning C4273: 'Vector::setY': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(30,10):
+      see previous definition of 'Vector::setY'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(28,9): warning C4273: 'Vector::Vector': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(24,5):
+      see previous definition of 'Vector::Vector'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(30,9): warning C4273: 'Vector::Vector': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(25,5):
+      see previous definition of 'Vector::Vector'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(32,16): warning C4273: 'Vector::operator +': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(32,12):
+      see previous definition of 'Vector::operator +'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(37,16): warning C4273: 'Vector::operator -': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(37,12):
+      see previous definition of 'Vector::operator -'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(42,16): warning C4273: 'Vector::operator *': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(38,12):
+      see previous definition of 'Vector::operator *'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(47,16): warning C4273: 'Vector::operator /': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(39,12):
+      see previous definition of 'Vector::operator /'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(55,16): warning C4273: 'Vector::length': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(34,12):
+      see previous definition of 'Vector::length'
+  
+C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.cpp(61,16): warning C4273: 'Vector::angle': inconsistent dll linkage
+      C:\Users\Kiryl\vs projects\WindowsLibs\DynamicLib\VectorLibrary.h(35,12):
+      see previous definition of 'Vector::angle'
+  
+     Creating library C:\Users\Kiryl\vs projects\WindowsLibs\x64\Debug\DynamicLib.lib and object C:\Users\Kiryl\vs projects\WindowsLibs\x64\Debug\DynamicLib.exp
+  DynamicLib.vcxproj -> C:\Users\Kiryl\vs projects\WindowsLibs\x64\Debug\DynamicLib.dll
