@@ -1,0 +1,62 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{58E3E5F4-CE33-44B2-8F3F-9294199F5A37}|user\\user.vcxproj|C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\user\\user.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{58E3E5F4-CE33-44B2-8F3F-9294199F5A37}|user\\user.vcxproj|solutionrelative:user\\user.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{818AC1B2-ECD1-42F9-95F3-9377B1B174E0}|win_lab_4\\win_lab_4.vcxproj|C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\win_lab_4\\killer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{818AC1B2-ECD1-42F9-95F3-9377B1B174E0}|win_lab_4\\win_lab_4.vcxproj|solutionrelative:win_lab_4\\killer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "user.cpp",
+              "DocumentMoniker": "C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\user\\user.cpp",
+              "RelativeDocumentMoniker": "user\\user.cpp",
+              "ToolTip": "C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\user\\user.cpp",
+              "RelativeToolTip": "user\\user.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEsAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-15T12:59:12.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "killer.cpp",
+              "DocumentMoniker": "C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\win_lab_4\\killer.cpp",
+              "RelativeDocumentMoniker": "win_lab_4\\killer.cpp",
+              "ToolTip": "C:\\Alexey\\Projects\\University\\OS_Alexey_Korolyuk\\win_lab_4\\win_lab_4\\killer.cpp",
+              "RelativeToolTip": "win_lab_4\\killer.cpp",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAmwGYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-11-15T12:40:22.123Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

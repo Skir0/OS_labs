@@ -1,0 +1,4 @@
+/home/hua1ra/Alexey/University/OS_Alexey_Korolyuk/lin_lab_4/build/CMakeFiles/user.dir
+/home/hua1ra/Alexey/University/OS_Alexey_Korolyuk/lin_lab_4/build/CMakeFiles/killer.dir
+/home/hua1ra/Alexey/University/OS_Alexey_Korolyuk/lin_lab_4/build/CMakeFiles/edit_cache.dir
+/home/hua1ra/Alexey/University/OS_Alexey_Korolyuk/lin_lab_4/build/CMakeFiles/rebuild_cache.dir
