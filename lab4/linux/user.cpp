@@ -123,7 +123,7 @@ void CheckAndOutput(RunningProcess& rp)
 
 int main()
 {
-    IgnoreChildSignal();   
+    IgnoreChildSignal();
     cout << "================ USER APP STARTED ================" << endl;
     cout << "[User] My PID: " << getpid() << endl;
     setenv("PROC_TO_KILL", "sleep", 1);

@@ -14,103 +14,103 @@
 
 using namespace std;
 
-string GetProcessName(pid_t pid)
+string obtainProcessName(pid_t processIdentifier)
 {
-    char path[256];
-    snprintf(path, sizeof(path), "/proc/%d/comm", pid);
-    ifstream commFile(path);
-    if (commFile.is_open())
+    char filePath[256];
+    snprintf(filePath, sizeof(filePath), "/proc/%d/comm", processIdentifier);
+    ifstream nameFile(filePath);
+    if (nameFile.is_open())
     {
-        string name;
-        getline(commFile, name);
-        return name;
+        string processName;
+        getline(nameFile, processName);
+        return processName;
     }
     return "";
 }
 
-void KillProcessById(pid_t processId)
+void terminateProcessById(pid_t processIdentifier)
 {
-    cout << "\n[Killer] Killing by ID: " << processId << endl;
-    if (processId <= 0 || processId == getpid())
+    cout << "\n[Killer] Terminating by ID: " << processIdentifier << endl;
+    if (processIdentifier <= 0 || processIdentifier == getpid())
     {
         cout << "[Killer] Invalid process ID or self-termination prevented." << endl;
         return;
     }
-    string procName = GetProcessName(processId);
-    if (!procName.empty())
+    string processName = obtainProcessName(processIdentifier);
+    if (!processName.empty())
     {
-        cout << "[Killer] Process name: " << procName << endl;
+        cout << "[Killer] Process name: " << processName << endl;
     }
-    if (kill(processId, 0) == 0)
+    if (kill(processIdentifier, 0) == 0)
     {
-        if (kill(processId, SIGTERM) == 0)
+        if (kill(processIdentifier, SIGTERM) == 0)
         {
-            cout << "[Killer] Sent SIGTERM to process " << processId << endl;
+            cout << "[Killer] Sent SIGTERM to process " << processIdentifier << endl;
             sleep(1);
-            if (kill(processId, 0) == 0)
+            if (kill(processIdentifier, 0) == 0)
             {
-                kill(processId, SIGKILL);
-                cout << "[Killer] Sent SIGKILL to process " << processId << endl;
+                kill(processIdentifier, SIGKILL);
+                cout << "[Killer] Sent SIGKILL to process " << processIdentifier << endl;
             }
         }
-        cout << "[Killer] ID " << processId << " terminated." << endl;
+        cout << "[Killer] ID " << processIdentifier << " terminated." << endl;
     }
     else
     {
-        cout << "[Killer] Process " << processId << " not found." << endl;
+        cout << "[Killer] Process " << processIdentifier << " not found." << endl;
     }
 }
 
-void KillProcessesByName(const string& processName)
+void terminateProcessesByName(const string& targetProcessName)
 {
-    cout << "\n[Killer] Killing by name: " << processName << endl;
-    DIR* procDir = opendir("/proc");
-    if (!procDir)
+    cout << "\n[Killer] Terminating by name: " << targetProcessName << endl;
+    DIR* processDirectory = opendir("/proc");
+    if (!processDirectory)
     {
         cerr << "[Killer] Cannot open /proc directory" << endl;
         return;
     }
-    struct dirent* entry;
-    vector<pid_t> pidsToKill;
-    while ((entry = readdir(procDir)) != nullptr)
+    struct dirent* directoryEntry;
+    vector<pid_t> processesToTerminate;
+    while ((directoryEntry = readdir(processDirectory)) != nullptr)
     {
-        pid_t pid = atoi(entry->d_name);
-        if (pid > 0 && pid != getpid())
+        pid_t processIdentifier = atoi(directoryEntry->d_name);
+        if (processIdentifier > 0 && processIdentifier != getpid())
         {
-            string procName = GetProcessName(pid);
-            if (!procName.empty() && procName == processName)
+            string currentProcessName = obtainProcessName(processIdentifier);
+            if (!currentProcessName.empty() && currentProcessName == targetProcessName)
             {
-                pidsToKill.push_back(pid);
+                processesToTerminate.push_back(processIdentifier);
             }
         }
     }
-    closedir(procDir);
-    for (pid_t pid : pidsToKill)
+    closedir(processDirectory);
+    for (pid_t processIdentifier : processesToTerminate)
     {
-        cout << "[Killer] Found " << processName << " (ID: " << pid << ")" << endl;
-        KillProcessById(pid);
+        cout << "[Killer] Found " << targetProcessName << " (ID: " << processIdentifier << ")" << endl;
+        terminateProcessById(processIdentifier);
     }
-    if (pidsToKill.empty())
+    if (processesToTerminate.empty())
     {
-        cout << "[Killer] No processes found with name: " << processName << endl;
+        cout << "[Killer] No processes found with name: " << targetProcessName << endl;
     }
 }
 
-void HandleEnvironmentVariable()
+void processEnvironmentVariable()
 {
-    const char* envValue = getenv("PROC_TO_KILL");
-    if (envValue && strlen(envValue) > 0)
+    const char* environmentValue = getenv("PROC_TO_KILL");
+    if (environmentValue && strlen(environmentValue) > 0)
     {
-        string envStr(envValue);
-        cout << "\n[Killer] Reading PROC_TO_KILL: " << envStr << endl;
-        stringstream ss(envStr);
-        string name;
-        while (getline(ss, name, ','))
+        string environmentString(environmentValue);
+        cout << "\n[Killer] Reading PROC_TO_KILL: " << environmentString << endl;
+        stringstream stringStream(environmentString);
+        string processName;
+        while (getline(stringStream, processName, ','))
         {
-            name.erase(remove_if(name.begin(), name.end(), ::isspace), name.end());
-            if (!name.empty())
+            processName.erase(remove_if(processName.begin(), processName.end(), ::isspace), processName.end());
+            if (!processName.empty())
             {
-                KillProcessesByName(name);
+                terminateProcessesByName(processName);
             }
         }
     }
@@ -120,38 +120,38 @@ void HandleEnvironmentVariable()
     }
 }
 
-int main(int argc, char* argv[])
+int main(int argumentCount, char* argumentValues[])
 {
     cout << "================ KILLER APP STARTED ================" << endl;
     cout << "[Killer] My PID: " << getpid() << endl;
-    bool argsProcessed = false;
-    for (int i = 1; i < argc; ++i)
+    bool argumentsHandled = false;
+    for (int i = 1; i < argumentCount; ++i)
     {
-        string arg = argv[i];
-        if (arg == "--id" && i + 1 < argc)
+        string currentArgument = argumentValues[i];
+        if (currentArgument == "--id" && i + 1 < argumentCount)
         {
-            pid_t id = static_cast<pid_t>(atoi(argv[++i]));
-            KillProcessById(id);
-            argsProcessed = true;
+            pid_t processIdentifier = static_cast<pid_t>(atoi(argumentValues[++i]));
+            terminateProcessById(processIdentifier);
+            argumentsHandled = true;
         }
-        else if (arg == "--name" && i + 1 < argc)
+        else if (currentArgument == "--name" && i + 1 < argumentCount)
         {
-            string name = argv[++i];
-            KillProcessesByName(name);
-            argsProcessed = true;
+            string processName = argumentValues[++i];
+            terminateProcessesByName(processName);
+            argumentsHandled = true;
         }
-        else if (arg == "--help" || arg == "-h")
+        else if (currentArgument == "--help" || currentArgument == "-h")
         {
             cout << "Usage:" << endl;
-            cout << "  " << argv[0] << " --id <PID>        Kill process by ID" << endl;
-            cout << "  " << argv[0] << " --name <NAME>     Kill processes by name" << endl;
-            cout << "  " << argv[0] << "                   Use PROC_TO_KILL environment variable" << endl;
-            argsProcessed = true;
+            cout << "  " << argumentValues[0] << " --id <PID>        Terminate process by ID" << endl;
+            cout << "  " << argumentValues[0] << " --name <NAME>     Terminate processes by name" << endl;
+            cout << "  " << argumentValues[0] << "                   Use PROC_TO_KILL environment variable" << endl;
+            argumentsHandled = true;
         }
     }
-    if (!argsProcessed)
+    if (!argumentsHandled)
     {
-        HandleEnvironmentVariable();
+        processEnvironmentVariable();
     }
     cout << "================ KILLER APP FINISHED ================" << endl;
     return 0;

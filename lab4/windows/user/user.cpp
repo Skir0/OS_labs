@@ -3,96 +3,210 @@
 #include <windows.h>
 #include <vector>
 #include <tlhelp32.h>
+#include <psapi.h>
 
 using namespace std;
 
-struct RunningProcess
-{
-    DWORD id;
-    string name;
+const int MAX_NAME_SIZE = 260;
+
+struct ProcessData {
+    DWORD processId;
+    string processName;
+    bool terminated;
 };
 
-RunningProcess StartTestProcess(const string& appName)
-{
-    STARTUPINFOA si;
-    PROCESS_INFORMATION pi;
-    ZeroMemory(&si, sizeof(si));
-    si.cb = sizeof(si);
-    ZeroMemory(&pi, sizeof(pi));
-    cout << "\n[User] Launching: " << appName << endl;
-    vector<char> cmdBuffer(appName.begin(), appName.end());
-    cmdBuffer.push_back('\0');
-    CreateProcessA(NULL, cmdBuffer.data(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
-    CloseHandle(pi.hThread);
-    CloseHandle(pi.hProcess);
-    cout << "[User] Launched. ID: " << pi.dwProcessId << endl;
-    return { pi.dwProcessId, appName };
-}
+string ExtractProcessName(DWORD pid) {
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+    if (!hProcess) return "unknown";
 
-bool IsProcessRunning(DWORD processId)
-{
-    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, processId);
-    if (hProcess == NULL) return false;
-    DWORD exitCode;
-    bool isRunning = (GetExitCodeProcess(hProcess, &exitCode) && exitCode == STILL_ACTIVE);
+    char exePath[MAX_NAME_SIZE];
+    DWORD pathSize = GetModuleFileNameExA(hProcess, NULL, exePath, MAX_NAME_SIZE);
     CloseHandle(hProcess);
-    return isRunning;
+
+    if (pathSize == 0) return "unknown";
+
+    string fullPath(exePath);
+    size_t lastSlash = fullPath.find_last_of("\\");
+    return (lastSlash != string::npos) ? fullPath.substr(lastSlash + 1) : fullPath;
 }
 
-void RunKiller(const string& args)
-{
-    string commandLine = "Killer.exe " + args;
-    cout << "\n--- Calling Killer: " << commandLine << " ---" << endl;
-    STARTUPINFOA si;
-    PROCESS_INFORMATION pi;
-    ZeroMemory(&si, sizeof(si));
-    si.cb = sizeof(si);
-    ZeroMemory(&pi, sizeof(pi));
-    vector<char> cmdBuffer(commandLine.begin(), commandLine.end());
-    cmdBuffer.push_back('\0');
-    CreateProcessA(NULL, cmdBuffer.data(), NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
-    WaitForSingleObject(pi.hProcess, INFINITE);
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-}
+ProcessData LaunchApplication(const string& commandLine) {
+    cout << "\n[User] Launching application: " << commandLine << endl;
 
-void CheckAndOutput(const RunningProcess& rp)
-{
-    if (rp.id == 0) return;
-    cout << "Check " << rp.id << " (" << rp.name << "): ";
-    if (IsProcessRunning(rp.id))
-    {
-        cout << "STILL RUNNING." << endl;
+    STARTUPINFOA startupInfo;
+    PROCESS_INFORMATION processInfo;
+
+    ZeroMemory(&startupInfo, sizeof(startupInfo));
+    startupInfo.cb = sizeof(startupInfo);
+    ZeroMemory(&processInfo, sizeof(processInfo));
+
+    char cmdCopy[1024];
+    strncpy_s(cmdCopy, commandLine.c_str(), sizeof(cmdCopy) - 1);
+
+    if (!CreateProcessA(NULL, cmdCopy, NULL, NULL, FALSE,
+                       CREATE_NEW_CONSOLE, NULL, NULL, &startupInfo, &processInfo)) {
+        DWORD error = GetLastError();
+        cout << "[User] Failed to create process (Error: " << error << ")" << endl;
+        return {0, "", false};
     }
-    else
-    {
-        cout << "TERMINATED." << endl;
+
+    Sleep(500);
+
+    string actualName = ExtractProcessName(processInfo.dwProcessId);
+    cout << "[User] Launched successfully. PID: " << processInfo.dwProcessId
+         << ", Name: " << actualName << endl;
+
+    CloseHandle(processInfo.hThread);
+    CloseHandle(processInfo.hProcess);
+
+    return {processInfo.dwProcessId, commandLine, false};
+}
+
+bool CheckProcessActive(DWORD processId) {
+    if (processId == 0) return false;
+
+    HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, processId);
+    if (!hProcess) return false;
+
+    DWORD exitCode;
+    bool isActive = false;
+
+    if (GetExitCodeProcess(hProcess, &exitCode)) {
+        isActive = (exitCode == STILL_ACTIVE);
+    }
+
+    CloseHandle(hProcess);
+    return isActive;
+}
+
+void ExecuteKiller(const string& arguments) {
+    string fullCommand = "Killer.exe " + arguments;
+    cout << "\n--- Executing Killer: " << fullCommand << " ---" << endl;
+
+    STARTUPINFOA startupInfo;
+    PROCESS_INFORMATION processInfo;
+
+    ZeroMemory(&startupInfo, sizeof(startupInfo));
+    startupInfo.cb = sizeof(startupInfo);
+    ZeroMemory(&processInfo, sizeof(processInfo));
+
+    char cmdLine[1024];
+    strncpy_s(cmdLine, fullCommand.c_str(), sizeof(cmdLine) - 1);
+
+    if (CreateProcessA(NULL, cmdLine, NULL, NULL, FALSE,
+                      CREATE_NO_WINDOW, NULL, NULL, &startupInfo, &processInfo)) {
+        WaitForSingleObject(processInfo.hProcess, INFINITE);
+
+        DWORD exitCode;
+        GetExitCodeProcess(processInfo.hProcess, &exitCode);
+        cout << "[User] Killer completed with exit code: " << exitCode << endl;
+
+        CloseHandle(processInfo.hThread);
+        CloseHandle(processInfo.hProcess);
+    } else {
+        DWORD error = GetLastError();
+        cout << "[User] Failed to execute Killer (Error: " << error << ")" << endl;
     }
 }
 
-int main()
-{
-    cout << "================ USER APP STARTED ================" << endl;
+void VerifyProcessStatus(ProcessData& process) {
+    if (process.processId == 0 || process.terminated) return;
+
+    cout << "Checking PID " << process.processId << " (" << process.processName << "): ";
+
+    if (CheckProcessActive(process.processId)) {
+        string currentName = ExtractProcessName(process.processId);
+        cout << "ACTIVE as '" << currentName << "'" << endl;
+    } else {
+        cout << "TERMINATED" << endl;
+        process.terminated = true;
+    }
+}
+
+void CleanupProcesses(vector<ProcessData>& processes) {
+    cout << "\n=== Cleaning up remaining processes ===" << endl;
+    int remainingCount = 0;
+
+    for (auto& proc : processes) {
+        if (!proc.terminated && CheckProcessActive(proc.processId)) {
+            cout << "Terminating process " << proc.processId << endl;
+
+            HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, FALSE, proc.processId);
+            if (hProcess) {
+                TerminateProcess(hProcess, 0);
+                WaitForSingleObject(hProcess, 1000);
+                CloseHandle(hProcess);
+
+                if (!CheckProcessActive(proc.processId)) {
+                    proc.terminated = true;
+                }
+                remainingCount++;
+            }
+        }
+    }
+
+    if (remainingCount == 0) {
+        cout << "No remaining processes found" << endl;
+    }
+}
+
+int main() {
+    cout << "================ PROCESS TESTER APPLICATION ================" << endl;
+    cout << "[User] Current PID: " << GetCurrentProcessId() << endl;
+
     SetEnvironmentVariableA("PROC_TO_KILL", "Notepad.exe,calc.exe");
-    cout << "[User] Set env var PROC_TO_KILL = 'Notepad.exe,calc.exe'" << endl;
-    RunningProcess p1 = StartTestProcess("Notepad.exe");
-    if (p1.id != 0)
-    {
-        RunKiller("--id " + to_string(p1.id));
-        CheckAndOutput(p1);
+    cout << "[User] Set environment variable: PROC_TO_KILL = 'Notepad.exe,calc.exe'" << endl;
+
+    vector<ProcessData> testProcesses;
+
+    cout << "\n=== Test Scenario 1: Terminate by Process ID ===" << endl;
+    ProcessData proc1 = LaunchApplication("Notepad.exe");
+    testProcesses.push_back(proc1);
+
+    if (proc1.processId != 0) {
+        Sleep(1500);
+        ExecuteKiller("--id " + to_string(proc1.processId));
+        VerifyProcessStatus(testProcesses[0]);
     }
-    RunningProcess p2 = StartTestProcess("Notepad.exe");
-    RunningProcess p3 = StartTestProcess("Notepad.exe");
-    RunKiller("--name Notepad.exe");
-    CheckAndOutput(p2);
-    CheckAndOutput(p3);
-    RunningProcess p4 = StartTestProcess("Notepad.exe");
-    RunningProcess p5 = StartTestProcess("calc.exe");
-    RunKiller("");
-    CheckAndOutput(p4);
-    CheckAndOutput(p5);
+
+    cout << "\n=== Test Scenario 2: Terminate by Process Name ===" << endl;
+    ProcessData proc2 = LaunchApplication("Notepad.exe");
+    ProcessData proc3 = LaunchApplication("Notepad.exe");
+    testProcesses.push_back(proc2);
+    testProcesses.push_back(proc3);
+
+    Sleep(1500);
+    ExecuteKiller("--name Notepad.exe");
+
+    for (size_t i = 1; i < testProcesses.size(); i++) {
+        VerifyProcessStatus(testProcesses[i]);
+    }
+
+    cout << "\n=== Test Scenario 3: Environment Variable ===" << endl;
+    ProcessData proc4 = LaunchApplication("Notepad.exe");
+    ProcessData proc5 = LaunchApplication("calc.exe");
+    testProcesses.push_back(proc4);
+    testProcesses.push_back(proc5);
+
+    Sleep(1500);
+    ExecuteKiller("--env");
+
+    for (size_t i = 3; i < testProcesses.size(); i++) {
+        VerifyProcessStatus(testProcesses[i]);
+    }
+
+    cout << "\n=== Test Scenario 4: List All Processes ===" << endl;
+    ExecuteKiller("--list");
+
+    CleanupProcesses(testProcesses);
+
     SetEnvironmentVariableA("PROC_TO_KILL", NULL);
-    cout << "\n[User] Removed environment variable PROC_TO_KILL." << endl;
-    cout << "================ USER APP FINISHED ================" << endl;
+    cout << "\n[User] Cleared environment variable" << endl;
+
+    cout << "\n================ TESTING COMPLETE ================" << endl;
+
+    cout << "\nPress Enter to exit...";
+    cin.get();
+
     return 0;
 }
