@@ -82,19 +82,20 @@ private:
 
 public:
     vector<vector<int>> multiplyMatrices(const vector<vector<int>> &matrixA, const vector<vector<int>> &matrixB,
-                                        int blockSize = 0) {
-        if (blockSize == 0) {
-            blockSize = matrixA.size();
+                                        int numBlocks = 1) {
+        if (numBlocks <= 0) {
+            numBlocks = 1;
         }
-
+        
         vector<thread> workerThreads;
         mutex mutexLock;
         vector<vector<int>> resultMatrix(matrixA.size(), vector<int>(matrixA.size(), 0));
-        int totalBlocks = (matrixA.size() + blockSize - 1) / blockSize;
+        
+        int blockSize = (matrixA.size() + numBlocks - 1) / numBlocks;
 
-        for (int blockRow = 0; blockRow < totalBlocks; ++blockRow) {
-            for (int blockCol = 0; blockCol < totalBlocks; ++blockCol) {
-                for (int blockK = 0; blockK < totalBlocks; ++blockK) {
+        for (int blockRow = 0; blockRow < numBlocks; ++blockRow) {
+            for (int blockCol = 0; blockCol < numBlocks; ++blockCol) {
+                for (int blockK = 0; blockK < numBlocks; ++blockK) {
                     workerThreads.emplace_back(&MatrixMultiplier::executeBlockMultiplication, this,
                                               cref(matrixA), cref(matrixB), ref(resultMatrix),
                                               blockRow, blockCol, blockK, blockSize, ref(mutexLock));
@@ -127,22 +128,21 @@ public:
         cout << "Matrix B:\n";
         displayMatrix(matrixB);
 
-        // Test with different block sizes
-        vector<int> blockSizes = {3, 2, 1};
+        vector<int> blockAmounts = {3, 2, 1};
 
-        for (int blockSize : blockSizes) {
+        for (int numBlocks : blockAmounts) {
             cout << "\n\n";
-            cout << "\tBlock amount " << blockSize << " (~" << blockSize * blockSize << " threads)\n";
+            cout << "\tBlock amount: " << numBlocks << "\n";
             cout << "A * B:\n";
 
             auto startTime = chrono::high_resolution_clock::now();
-            resultMatrix = multiplyMatrices(matrixA, matrixB, blockSize);
+            resultMatrix = multiplyMatrices(matrixA, matrixB, numBlocks);
             auto endTime = chrono::high_resolution_clock::now();
-            auto duration = chrono::duration<double>(endTime - startTime);
+            auto duration = chrono::duration<double, milli>(endTime - startTime);
 
             displayMatrix(resultMatrix);
             cout << fixed << setprecision(6);
-            cout << "Time taken: " << duration.count() << " seconds\n";
+            cout << "Time taken: " << duration.count() << "ms\n";
         }
     }
 };
